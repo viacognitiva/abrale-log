@@ -1,8 +1,3 @@
-
-/*
- * GET home page.
- */
-
 var validateRequest = require('../config/validateRequest.js');
 
 module.exports = {

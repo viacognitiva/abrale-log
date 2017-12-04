@@ -22,7 +22,6 @@ var validateRequest = require('./config/validateRequest.js');
 
 var schedule = require('node-schedule');
 
-
 var app = express();
 
 var fileToUpload;
@@ -48,7 +47,6 @@ app.use('/style', express.static(path.join(__dirname, '/views/style')));
 if ('development' == app.get('env')) {
     app.use(errorHandler());
 }
-
 
 app.use(cookieParser());
 

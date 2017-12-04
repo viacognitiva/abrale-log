@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/analistic-logs-conversation.iml" filepath="$PROJECT_DIR$/.idea/analistic-logs-conversation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/xpersocial-log.iml" filepath="$PROJECT_DIR$/.idea/xpersocial-log.iml" />
     </modules>
   </component>
 </project>
