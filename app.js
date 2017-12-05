@@ -7,19 +7,16 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     fs = require('fs');
+
 var cfenv = require('cfenv');
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 
 var cloudant = require('./config/cloudant.js');
-
 var logconversation = require('./config/logconversation.js');
-
 var auth = require('./routes/auth.js');
-
 var validateRequest = require('./config/validateRequest.js');
-
 var schedule = require('node-schedule');
 
 var app = express();
@@ -35,9 +32,11 @@ app.set('port', process.env.PORT || 2000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -147,7 +146,6 @@ app.get('/api/logconversation/workspace', function (req, res) {
 app.get('/api/logconversation/workspace/selecionado', function (req, res) {
     cloudant.getWorkspaceSelecionada(req, res);
 });
-
 
 http.createServer(app).listen(app.get('port'), '0.0.0.0', function() {
     console.log('Express server listening on port ' + app.get('port'));
