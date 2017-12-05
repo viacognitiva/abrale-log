@@ -64,7 +64,6 @@ var auth = {
 }
 
 /*private methods*/
-
 function genToken(user) {
 
     var expires = expiresSeg(60);
