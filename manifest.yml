@@ -3,7 +3,7 @@ applications:
   memory: 512M
   instances: 1
   domain: mybluemix.net
-  name: analistic-logs-conversation
-  host: analistic-logs-conversation${random-word}
+  name: xpersocial-log
+  host: xpersocial-log${random-word}
   disk_quota: 512M
 
