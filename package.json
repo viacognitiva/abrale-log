@@ -1,34 +1,35 @@
 {
-    "name": "xpersocial-log"
-    , "version": "0.0.2"
-    , "private": true
-    , "scripts": {
-        "start": "node app.js"
-    }
-    , "dependencies": {
-        "express": "4.13.x"
-        ,"express-session": "^1.7.6"
-        ,"cookie-parser": "latest"
-        , "ejs": "2.5.5"
-        , "cloudant": "1.4.x"
-        , "body-parser": "1.14.x"
-        , "method-override": "2.3.x"
-        , "morgan": "1.6.x"
-        , "errorhandler": "1.4.x"
-        , "connect-multiparty": "2.0.x"
-        , "watson-developer-cloud": "2.27.1"
-        , "cfenv": "^1.0.3"
-        ,"jwt-simple": "^0.2.0"
-        ,"dotenv": "*",
-        "chrono-node":"*",
-        "request": "*",
-        "node-schedule":"1.2.5",
-        "cron-parser": "^2.4.0",
-        "long-timeout": "0.1.1",
-        "sorted-array-functions": "^1.0.0"
-    }
-    , "repository": {}
-    , "engines": {
+  "name": "xpersocial-log",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "1.14.x",
+    "cfenv": "^1.0.3",
+    "chrono-node": "*",
+    "cloudant": "1.4.x",
+    "connect-multiparty": "2.0.x",
+    "cookie-parser": "latest",
+    "cron-parser": "^2.4.0",
+    "dotenv": "*",
+    "dotenv-safe": "^4.0.4",
+    "ejs": "2.5.5",
+    "errorhandler": "1.4.x",
+    "express": "4.13.x",
+    "express-session": "^1.7.6",
+    "jwt-simple": "^0.2.0",
+    "long-timeout": "0.1.1",
+    "method-override": "2.3.x",
+    "morgan": "1.6.x",
+    "node-schedule": "1.2.5",
+    "request": "*",
+    "sorted-array-functions": "^1.0.0",
+    "watson-developer-cloud": "2.27.1"
+  },
+  "repository": {},
+  "engines": {
     "node": "6.9.4"
-    }
+  }
 }

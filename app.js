@@ -1,7 +1,6 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express'),
     routes = require('./routes/index.js'),
     http = require('http'),
@@ -9,7 +8,6 @@ var express = require('express'),
     fs = require('fs');
 
 var cfenv = require('cfenv');
-
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 
@@ -18,6 +16,8 @@ var logconversation = require('./config/logconversation.js');
 var auth = require('./routes/auth.js');
 var validateRequest = require('./config/validateRequest.js');
 var schedule = require('node-schedule');
+
+require('dotenv-safe').load();
 
 var app = express();
 
@@ -56,18 +56,10 @@ app.use(session({
   cookie: {}
 }))
 
-//var job = schedule.scheduleJob('00 23 * * *', function(){
-//  console.log('Rodando Job Carga Log Treinamento..');
-//  cloudant.insertLogTreinamento(function() {});
-//});
-
 app.get('/', routes.login);
-
 app.post('/login', auth.login);
-
 app.post('/listalogs', routes.listalogs);
 
-//http://localhost:9000/api/cloudant/viacognitiva
 app.get('/api/cloudant/:id', function (req, res) {
     cloudant.get(req, res);
 });
@@ -86,10 +78,9 @@ app.get('/api/logconversation/treinamento', function (req, res) {
 });
 
 app.get('/api/logconversation/curacidade', function (req, res) {
-    console.log('Buscando ->  curacidade ');
+    console.log('Buscando ->  acuracidade ');
     cloudant.getPrcCuracidade(req, res);
 });
-
 
 app.get('/api/getUserAutenticado', function (req, res) {
   if (typeof req.session.usuario != 'undefined'){

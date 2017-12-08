@@ -1,32 +1,20 @@
+require('dotenv-safe').load();
+
 var request=require('request');
 var express = require('express');
 var app = express();
+
 app.set('port', process.env.PORT || 2000);
 
-var workspacesId =  '7f576bfc-2d11-4de2-b985-98e8185e5664';
-var username = 'd1df6c26-bedc-4965-9a79-e1339c0cff80';
-var password = '3lUqPxo4kNm2';
-var apiHostname = 'gateway.watsonplatform.net';
+var apiHostname = process.env.APIHOSTNAME;
 var protocol = process.env.NODE_ENV == 'production' ? "https" : "http" ;
 
 function mymodule_init(callback){
 
-    var fullUrl = protocol + "://localhost:"+app.get('port')+"/api/logconversation/workspace/selecionado";
-    console.log("fullUrl "+fullUrl);
-    console.log("ambiente "+process.env.NODE_ENV);
-
-    request.get(fullUrl,function(err,resp,body){
-
-        if (typeof body != 'undefined') {
-            var obj = JSON.parse(body);
-            console.log(obj);
-            workspacesId = obj.docs[0].workspaceId;
-            username = obj.docs[0].username;
-            password = obj.docs[0].password;
-        }
-
-        callback(null);
-    });
+    workspacesId = process.env.WORKSPACE_ID;
+    username = process.env.USERNAME;
+    password = process.env.PASSWORD;
+    callback(null);
 }
 
 //Run my init:
@@ -36,12 +24,10 @@ var logConversation = {
 
     get : function(req,res) {
 
-        console.log("Buscando log");
-        const baseQuery = `/conversation/api/v1/workspaces/${workspacesId}/logs`;
+        const baseQuery = '/conversation/api/v1/workspaces/'+ workspacesId +'/logs';
         const version = 'version=2017-05-26';
-
-        const fullUrl = `https://${username}:${password}@${apiHostname}${baseQuery}?${version}`;
-        console.log(fullUrl);
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        //console.log('URL:' + fullUrl);
 
         request.get(fullUrl,function(err,resp,body){
 

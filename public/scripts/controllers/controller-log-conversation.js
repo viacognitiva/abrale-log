@@ -24,7 +24,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
 
             var retorno = [];
             var data = response.data;
-            console.log('data '+data);
+            console.log('Buscar - retorno get[/api/logconversation/treinamento]:' + JSON.stringify(data));
             var pos = 0;
 
             angular.forEach(data.docs, function(item){
@@ -60,7 +60,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
                 retorno.push({selected: {}});
             }
 
-            console.log('size data '+retorno.length);
+            //console.log('size data '+retorno.length);
             $scope.items = retorno;
             $scope.filteredItems = retorno;
 

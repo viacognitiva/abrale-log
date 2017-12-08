@@ -24,6 +24,19 @@ app.controller('userController', ['$window','$scope', '$log', '$http','$filter',
         );
     }
 
+    $scope.iniciar = function(){
+
+        $http.get('/api/logconversation').then(
+            function(response){
+                    console.log('Retorno - iniciar:' + JSON.stringify(response.data));
+            },
+            function(erro){
+                console.log('Erro '+response);
+            }
+        );
+
+    }
+
     myRedirect = function(redirectUrl, arg, value) {
 
         var form = $('<form action="' + redirectUrl + '" method="post">' +

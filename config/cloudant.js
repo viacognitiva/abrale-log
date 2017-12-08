@@ -109,7 +109,7 @@ var cloudant = {
         var query = { selector: { selecionado: 'true' }};
         db.find(query, function(err, data) {
             if (err) {
-                return console.log('[db.getWorkspaceSelected ] ', err.message);
+                return console.log('[db.getWorkspaceSelected] ', err.message);
             }
             res.status(201).json(data);
         });
@@ -176,7 +176,7 @@ var cloudant = {
 
     insertLogTreinamento : function (callback) {
 
-        var fullUrl = protocol + "://localhost:"+app.get('port')+"/api/logconversation/";
+        var fullUrl = protocol + "://localhost:" + app.get('port') + "/api/logconversation/";
 
         request.get(fullUrl,function(err,resp,body){
 
@@ -190,7 +190,7 @@ var cloudant = {
 
             for(var i = 0; i < dataLog.logs.length;i++){
 
-                dataLog.logs[i]._id=dataLog.logs[i].request_timestamp+"_"+dataLog.logs[i].request.input.text;
+                dataLog.logs[i]._id=dataLog.logs[i].request_timestamp + "_" + dataLog.logs[i].request.input.text;
                 dataLog.logs[i].treinado=false;
                 dataLog.logs[i].ativo=true;
 
@@ -248,13 +248,13 @@ var cloudant = {
 
         db = cloudantDB.db.use(dbname);
         db.index( {name:'_id', type:'json', index:{fields:['ativo']}});
-        var query = { selector: { ativo: true }};
+        //var query = { selector: { ativo: true }};
+        var query = { selector: { '$not': {messageUser: ''}}};
 
         db.find(query, function(err, data) {
             if (err) {
                 return console.log('[db.getLogTreinamento] ', err.message);
             }
-            //console.log(body);
             res.status(201).json(data);
         });
     },
