@@ -5,6 +5,7 @@ var request=require('request');
 var http = require("http");
 var app = express();
 app.set('port', process.env.PORT || 2000);
+
 var protocol = process.env.NODE_ENV == 'production' ? "https" : "http" ;
 
 var cloudant_url="https://b6a29beb-91ed-4256-81c4-458e3ff55a71-bluemix:2cd1080e5c8ac457d9cbc3105aabfa7f28abfe45e03cae99eaa5910dbc84ab6a@b6a29beb-91ed-4256-81c4-458e3ff55a71-bluemix.cloudant.com";
@@ -24,7 +25,7 @@ if(process.env.VCAP_SERVICES) {
 }
 
 var dbname = 'log-xpersocial';
-var cloudantDB = Cloudant({url: cloudant_url,account:user,password:password});
+var cloudantDB = Cloudant({url:cloudant_url, account:user, password:password});
 db = cloudantDB.db.use(dbname);
 
 var cloudant = {
@@ -34,9 +35,9 @@ var cloudant = {
         var id = req.params.id;
         console.log('id ='+id);
 
-          db.get(id, function(err, data) {
-               res.status(200).json(data);
-           });
+        db.get(id, function(err, data) {
+            res.status(200).json(data);
+        });
     },
 
     insertLogs : function (req, res) {
@@ -248,8 +249,7 @@ var cloudant = {
 
         db = cloudantDB.db.use(dbname);
         db.index( {name:'_id', type:'json', index:{fields:['ativo']}});
-        //var query = { selector: { ativo: true }};
-        var query = { selector: { '$not': {messageUser: ''}}};
+        var query = { selector: { ativo: true }};
 
         db.find(query, function(err, data) {
             if (err) {

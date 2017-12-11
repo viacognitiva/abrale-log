@@ -3,22 +3,13 @@ require('dotenv-safe').load();
 var request=require('request');
 var express = require('express');
 var app = express();
-
 app.set('port', process.env.PORT || 2000);
 
+var username = process.env.USERNAME;
+var password = process.env.PASSWORD;
 var apiHostname = process.env.APIHOSTNAME;
+var workspacesId = process.env.WORKSPACE_ID;
 var protocol = process.env.NODE_ENV == 'production' ? "https" : "http" ;
-
-function mymodule_init(callback){
-
-    workspacesId = process.env.WORKSPACE_ID;
-    username = process.env.USERNAME;
-    password = process.env.PASSWORD;
-    callback(null);
-}
-
-//Run my init:
-mymodule_init(function(){});
 
 var logConversation = {
 
@@ -27,7 +18,7 @@ var logConversation = {
         const baseQuery = '/conversation/api/v1/workspaces/'+ workspacesId +'/logs';
         const version = 'version=2017-05-26';
         const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
-        //console.log('URL:' + fullUrl);
+        console.log('logConversation.get');
 
         request.get(fullUrl,function(err,resp,body){
 
@@ -42,10 +33,9 @@ var logConversation = {
 
     getEntidades : function(req,res) {
 
-        const baseQuery = '/conversation/api/v1/workspaces/${workspacesId}/entities';
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities';
         const version = 'version=2017-05-26&export=false&include_count=false';
-
-        const fullUrl = 'https://${username}:${password}@${apiHostname}${baseQuery}?${version}';
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
         console.log(fullUrl);
 
         request.get(fullUrl,function(err,resp,body){
@@ -60,10 +50,9 @@ var logConversation = {
 
     getIntencoes : function(req,res) {
 
-        const baseQuery = '/conversation/api/v1/workspaces/${workspacesId}/intents';
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/intents';
         const version = 'version=2017-05-26&export=false&include_count=false';
-
-        const fullUrl = 'https://${username}:${password}@${apiHostname}${baseQuery}?${version}';
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
         console.log(fullUrl);
 
         request.get(fullUrl,function(err,resp,body){
@@ -80,12 +69,10 @@ var logConversation = {
     treinaIntencao : function(req,res) {
 
         const intent =  req.body.intencao;
-        const baseQuery = '/conversation/api/v1/workspaces/${workspacesId}/intents/${intent}/examples';
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/intents/${intent}/examples';
         const version = 'version=2017-05-26';
-
-        const fullUrl = 'https://${username}:${password}@${apiHostname}${baseQuery}?${version}';
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
         console.log(fullUrl);
-        console.log("id do treina intencao "+req.body.id);
 
         request.post({
             headers: { "Content-Type": "application/json"},
@@ -103,12 +90,9 @@ var logConversation = {
     treinaEntidade : function(req,res) {
 
         const entity =  req.body.entidade;
-        const baseQuery = '/conversation/api/v1/workspaces/${workspacesId}/entities/${entity}/values';
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities/' + entity +'/values';
         const version = 'version=2017-05-26';
-        const fullUrl = 'https://${username}:${password}@${apiHostname}${baseQuery}?${version}';
-
-        console.log(fullUrl);
-        console.log("id do treina entidade "+req.body.id);
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
 
         request.post(
             {
@@ -129,11 +113,9 @@ var logConversation = {
     getEntidadeValue : function(req,res) {
 
         const entity=req.params.entity;
-        const baseQuery = '/conversation/api/v1/workspaces/${workspacesId}/entities/${entity}/values';
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities/' + entity + '/values';
         const version = 'version=2017-05-26&export=false&include_count=false';
-
-        const fullUrl = 'https://${username}:${password}@${apiHostname}${baseQuery}?${version}';
-        console.log(fullUrl);
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
 
         request.get(fullUrl,function(err,resp,body){
             if(err){
@@ -148,11 +130,9 @@ var logConversation = {
         const entity =  req.body.entidade;
         const value =  req.body.valor;
 
-        const baseQuery = `/conversation/api/v1/workspaces/${workspacesId}/entities/${entity}/values/${value}/synonyms`;
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities/' + entity + '/values/' + value + '/synonyms';
         const version = 'version=2017-05-26';
-
-        const fullUrl = `https://${username}:${password}@${apiHostname}${baseQuery}?${version}`;
-        console.log(fullUrl);
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
 
         request.post(
             {

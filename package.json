@@ -19,6 +19,7 @@
     "errorhandler": "1.4.x",
     "express": "4.13.x",
     "express-session": "^1.7.6",
+    "get-port": "^3.2.0",
     "jwt-simple": "^0.2.0",
     "long-timeout": "0.1.1",
     "method-override": "2.3.x",

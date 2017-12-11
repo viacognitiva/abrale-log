@@ -24,7 +24,6 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
 
             var retorno = [];
             var data = response.data;
-            console.log('Buscar - retorno get[/api/logconversation/treinamento]:' + JSON.stringify(data));
             var pos = 0;
 
             angular.forEach(data.docs, function(item){
