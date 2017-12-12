@@ -4,6 +4,8 @@ var app = angular.module('MinhaApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']
 app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal','$window', 
     function($scope,$log,$http,$filter,$uibModal,$window) {
 
+    $scope.mostrarUsuario = true;
+
     $scope.sortType     = 'name'; // set the default sort type
     $scope.sortReverse  = true;  // set the default sort order
     $scope.searchFish   = '';     // set the default search/filter term
@@ -15,6 +17,11 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
     $scope.tpTreinamento = ["Intenção", "Entidade"];
     $scope.prcConfianca = ["10", "20","30","40","50","60","70","80","90","100"];
     $scope.sinalMaiorMenor = ["<=", ">="];
+
+    $scope.chat = function(){
+        $scope.mostrarUsuario = true;
+        $scope.mostrarChat = false;
+    }
 
     $scope.buscar = function() {
 
@@ -59,7 +66,6 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
                 retorno.push({selected: {}});
             }
 
-            //console.log('size data '+retorno.length);
             $scope.items = retorno;
             $scope.filteredItems = retorno;
 
@@ -72,6 +78,54 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
             $scope.loading = false;
 
         });
+    }
+
+    $scope.usuario = function(){
+
+        $scope.loading = true;
+        $scope.mostrarUsuario = false;
+        $scope.mostrarChat = true;
+        var retorno = [];
+
+        $http.get('/api/logconversation/usuarios').then(
+
+            function(response){
+
+                var data = response.data;
+
+                angular.forEach(data.rows, function(item){
+
+                    var jsonParam = {};
+
+                    jsonParam.nome = item.doc.nome;
+                    jsonParam.email = item.doc.email;
+                    jsonParam.fone = item.doc.telefone;
+                    jsonParam.data = $filter('date')(new Date(item.doc.data), "dd/MM/yyyy HH:mm:ss");
+
+                    if(!angular.equals(jsonParam, {})){
+                        retorno.push(jsonParam);
+                    }
+
+                });
+
+                $scope.itemUsuario = retorno;
+                $scope.filteredUsuario = retorno;
+
+                if(retorno.length==0 ){
+                    $scope.errorMessage='Registro não encontrado.';
+                } else {
+                    $scope.errorMessage='';
+                }
+            },
+
+            function(erro){
+                console.log(erro);
+                res.status(500).json(erro);
+            }
+        );
+
+        $scope.loading = false;
+
     }
 
     $scope.logout = function() {
@@ -196,10 +250,12 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
             $scope.usuariologado = data.username;
         });
 
-        $http.get('/api/logconversation/curacidade').then(function(response) {
+        $http.get('/api/logconversation/acuracidade').then(function(response) {
             var data = response.data;
-            $scope.curacidade = parseFloat(data.curacidade.toFixed(2));
+            $scope.acuracidade = parseFloat(data.acuracidade.toFixed(2));
         });
+
+        $scope.buscar();
     };
 
 

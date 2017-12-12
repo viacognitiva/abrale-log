@@ -1,17 +1,20 @@
+require('dotenv-safe').load();
+
 var Cloudant = require('cloudant');
 var express = require('express');
 var fs = require('fs');
 var request=require('request');
 var http = require("http");
+
 var app = express();
 app.set('port', process.env.PORT || 2000);
 
 var protocol = process.env.NODE_ENV == 'production' ? "https" : "http" ;
 
-var cloudant_url="https://b6a29beb-91ed-4256-81c4-458e3ff55a71-bluemix:2cd1080e5c8ac457d9cbc3105aabfa7f28abfe45e03cae99eaa5910dbc84ab6a@b6a29beb-91ed-4256-81c4-458e3ff55a71-bluemix.cloudant.com";
+var cloudant_url = process.env.CLOUDANT_URL;
 var services = JSON.parse(process.env.VCAP_SERVICES || "{}");
-var user = 'b6a29beb-91ed-4256-81c4-458e3ff55a71-bluemix';
-var password = '2cd1080e5c8ac457d9cbc3105aabfa7f28abfe45e03cae99eaa5910dbc84ab6a';
+var user = process.env.CLOUDANT_USER;
+var password = process.env.CLOUDANT_PASSWORD;
 
 if(process.env.VCAP_SERVICES) {
 
@@ -24,9 +27,11 @@ if(process.env.VCAP_SERVICES) {
     }
 }
 
-var dbname = 'log-xpersocial';
+var dbname = process.env.CLOUDANT_DB;
+var dbuser = process.env.CLOUDANT_DBUSER;
 var cloudantDB = Cloudant({url:cloudant_url, account:user, password:password});
 db = cloudantDB.db.use(dbname);
+dbUser = cloudantDB.db.use(dbuser);
 
 var cloudant = {
 
@@ -38,6 +43,18 @@ var cloudant = {
         db.get(id, function(err, data) {
             res.status(200).json(data);
         });
+    },
+
+    getUsuarios : function(req, res){
+
+        dbUser.list({include_docs:true},function(err, data) {
+            if(err){
+                return console.log('[dbUser.getUsuarios] ', err.message);
+                res.status(500);
+            }
+            res.status(200).json(data);
+        });
+
     },
 
     insertLogs : function (req, res) {
@@ -208,7 +225,7 @@ var cloudant = {
         });
     },
 
-    getPrcCuracidade : function (req, res) {
+    getPrcAcuracidade : function (req, res) {
 
         db = cloudantDB.db.use(dbname);
         db.index( {name:'_id', type:'json', index:{fields:['ativo']}});
@@ -219,7 +236,7 @@ var cloudant = {
         db.find(query, function(err, data) {
 
             if (err) {
-                return console.log('[db.getLogTreinamento] ', err.message);
+                return console.log('[db.getPrcAcuracidade] ', err.message);
             }
 
             jsonParam.x = data.docs.length;
@@ -227,17 +244,17 @@ var cloudant = {
 
             db.find(query2, function(err1, data1) {
                 if (err1) {
-                    return console.log('[db.getLogTreinamento] ', err1.message);
+                    return console.log('[db.getPrcAcuracidade] ', err1.message);
                 }
 
                 jsonParam.y=data1.docs.length;
-                var text = '{ "curacidade" : '+((jsonParam.y/jsonParam.x)*100)+'}';
+                var text = '{ "acuracidade" : '+((jsonParam.y/jsonParam.x)*100)+'}';
 
-                if(!isNaN(text.curacidade)){
+                if(!isNaN(text.acuracidade)){
                     var obj1 = JSON.parse(text);
                     res.status(200).json(obj1);
                 } else {
-                    return console.log('[db.getLogTreinamento] - Error Curacidade');
+                    return console.log('[db.getPrcAcuracidade] - Error acuracidade');
                 }
 
             });

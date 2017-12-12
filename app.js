@@ -73,6 +73,10 @@ app.get('/api/logconversation', function (req, res) {
     logconversation.get(req, res);
 });
 
+app.get('/api/logconversation/usuarios', function (req, res) {
+    cloudant.getUsuarios(req, res);
+});
+
 app.post('/api/logconversation/treinamento/status', function (req, res) {
     cloudant.atualizaStatusTreinamento(req, res);
 });
@@ -82,9 +86,9 @@ app.get('/api/logconversation/treinamento', function (req, res) {
     cloudant.getLogTreinamento(req, res);
 });
 
-app.get('/api/logconversation/curacidade', function (req, res) {
+app.get('/api/logconversation/acuracidade', function (req, res) {
     console.log('Buscando ->  acuracidade ');
-    cloudant.getPrcCuracidade(req, res);
+    cloudant.getPrcAcuracidade(req, res);
 });
 
 app.get('/api/getUserAutenticado', function (req, res) {
