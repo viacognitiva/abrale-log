@@ -64,7 +64,7 @@ var cloudant = {
             messageWatson: req.body.messageWatson,
             messageUser:req.body.messageUser,
             intencao:req.body.intencao,
-            data : dataNow
+            data: dataNow
         }
 
         var dataNow = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
