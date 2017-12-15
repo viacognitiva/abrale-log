@@ -19,8 +19,9 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
     $scope.sinalMaiorMenor = ["<=", ">="];
 
     $scope.chat = function(){
-        $scope.mostrarUsuario = true;
-        $scope.mostrarChat = false;
+        $scope.mostrarUsuario   = true;
+        $scope.mostrarChat      = false;
+        $scope.searchFish       = '';
     }
 
     $scope.buscar = function() {
@@ -82,9 +83,10 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
 
     $scope.usuario = function(){
 
-        $scope.loading = true;
-        $scope.mostrarUsuario = false;
-        $scope.mostrarChat = true;
+        $scope.loading          = true;
+        $scope.mostrarUsuario   = false;
+        $scope.mostrarChat      = true;
+        $scope.searchFish       = '';
         var retorno = [];
 
         $http.get('/api/logconversation/usuarios').then(
