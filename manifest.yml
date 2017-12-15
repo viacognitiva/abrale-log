@@ -3,7 +3,7 @@ applications:
   memory: 512M
   instances: 1
   domain: mybluemix.net
-  name: xpersocial-log
-  host: xpersocial-log${random-word}
+  name: abrale-log
+  host: abrale-log${random-word}
   disk_quota: 512M
 
