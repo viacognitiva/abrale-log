@@ -270,6 +270,84 @@
             </div><!-- /.box-body -->
         </div>
 
+        <div ng-controller="ModalInstanceCtrl">
+
+            <script type="text/ng-template" id="myModalEntidade.html">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title">Definir Entidade:</h3>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <div class="form-group">
+                        <div  style="text-align: center;">
+                            <br/>
+                            <label>
+                                <input type="radio" ng-model="$ctrl.defineVlrSin" value="Valor" ng-change="$ctrl.onchangeRadioEnt()">
+                                Definir Novo Valor
+                            </label>
+                            <label style="margin-left: 5em;">
+                                <input type="radio" ng-model="$ctrl.defineVlrSin" value="Sinonimo" ng-change="$ctrl.onchangeRadioEnt()">
+                                Definir Novo Sinonimo
+                            </label><br/>
+                        </div>
+                        <label> Entidade </label>
+                        <select ng-model="selectedEntidade" class="form-control"  ng-change="$ctrl.onchangeEntidade()" >
+                            <option value="">-- selecione a entidade --</option>
+                            <option ng-repeat="x in $ctrl.entidades" value="{{x.descricao}}">{{x.descricao}}</option>
+                        </select></br>
+                        <div ng-if="$ctrl.defineVlrSin == 'Sinonimo'">
+                            <label > Valor </label>
+                            <select ng-model="$ctrl.selectedEntidadeValue"  class="form-control"  >
+                                <option value="">-- selecione o valor --</option>
+                                <option ng-repeat="x in $ctrl.EntidadeValues" value="{{x.descricao}}">{{x.descricao}}</option>
+                            </select>
+
+                        </div>
+                        <br/>
+                        <div  style="text-align: left;">
+                            <label>{{$ctrl.defineVlrSin}}</label>
+                            <span>{{$ctrl.mensagemEntidade}}</span>
+                        </div>
+
+                        <div class="alert alert-success" role="alert" ng-if="$ctrl.sucessoMessage">{{$ctrl.sucessoMessage}}</div>
+                        <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage}}</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Salvar</button>
+                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Fechar</button>
+                </div>
+            </script>
+
+            <script type="text/ng-template" id="myModalIntencao.html">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title1">Definir Intenção:</h3>
+                </div>
+                <div class="modal-body" id="modal-body1">
+                    <div class="form-group">
+                        <div>
+                            <label>Intenção</label>
+                            <select ng-model="selectedIntencao" class="form-control">
+                                <option value="">-- selecione a intenção --</option>
+                                <option ng-repeat="x in $ctrl.intencoes" value="{{x.descricao}}">{{x.descricao}}</option>
+                            </select>
+                        </div>
+                        <br/>
+                        <div style="text-align: left;">
+                            <label>Mensagem:</label>
+                            <span>{{$ctrl.mensagemIntencao}}</span>
+                        </div>
+                        <div class="alert alert-success" role="alert" ng-if="$ctrl.sucessoMessage">{{$ctrl.sucessoMessage}}</div>
+                        <div class="alert alert-danger" role="alert" ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage}}</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Salvar</button>
+                    <button class="btn brtn-warning" type="button" ng-click="$ctrl.cancel()">Fechar</button>
+                </div>
+            </script>
+
+        </div>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 

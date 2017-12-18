@@ -14,7 +14,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
 
         limpar();
 
-        if($scope.paramtro=='intencao'){
+        if($scope.parametro=='intencao'){
 
             if($scope.selection.length==0){
                 $ctrl.errorMessage="Selecione na tabela algum registro.";
@@ -41,7 +41,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
                                 function(response){
 
                                     //success callback
-                                    console.log('Sucesso '+response);
+                                    console.log('Sucesso /api/logconversation/intencao' + JSON.stringify(response));
 
                                     if(response.status==200){
                                         if(response.data.error){
@@ -51,7 +51,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
                                             var data1 = { idLog:sel };
                                             $http.post('/api/logconversation/treinamento/status',JSON.stringify(data1),config)
                                             .then(function(response){
-                                                console.log('Sucesso '+response);
+                                                console.log('Sucesso /api/logconversation/treinamento/status' + response);
                                                 if(response.status==201){
                                                     $scope.buscar();
                                                 }
@@ -113,7 +113,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
                                                 $http.post('/api/logconversation/treinamento/status',JSON.stringify(data1),config).then(
 
                                                     function(response){
-                                                        console.log('Sucesso '+response);
+                                                        console.log('Sucesso ' + JSON.stringify(response));
 
                                                         if(response.status==201){
                                                             $scope.buscar();

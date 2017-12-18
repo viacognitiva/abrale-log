@@ -18,8 +18,8 @@ app.controller('userController', ['$window','$scope', '$log', '$http','$filter',
                 }
             },
             function(erro){
-                console.log('Erro '+response);
-                $scope.errorMessage="Error : "+response.data.message;
+                //console.log('Erro '+ JSON.stringify(erro));
+                $scope.errorMessage = "Error : " + erro.data.message;
             }
         );
     }
@@ -31,7 +31,7 @@ app.controller('userController', ['$window','$scope', '$log', '$http','$filter',
                     console.log('Retorno - iniciar:' + JSON.stringify(response.data));
             },
             function(erro){
-                console.log('Erro '+response);
+                console.log('Erro '+ erro);
             }
         );
 
@@ -46,4 +46,3 @@ app.controller('userController', ['$window','$scope', '$log', '$http','$filter',
     };
 
 }]);
-

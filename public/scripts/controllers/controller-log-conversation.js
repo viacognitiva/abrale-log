@@ -9,6 +9,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
     $scope.sortType     = 'name'; // set the default sort type
     $scope.sortReverse  = true;  // set the default sort order
     $scope.searchFish   = '';     // set the default search/filter term
+    $scope.errorMessage = '';
 
     $scope.disableBtnTreinarIntencao = true;
     $scope.disableBtnTreinarEntidade = true;
@@ -22,6 +23,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         $scope.mostrarUsuario   = true;
         $scope.mostrarChat      = false;
         $scope.searchFish       = '';
+        $scope.errorMessage     = '';
     }
 
     $scope.buscar = function() {
@@ -87,6 +89,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         $scope.mostrarUsuario   = false;
         $scope.mostrarChat      = true;
         $scope.searchFish       = '';
+        $scope.errorMessage     = '';
         var retorno = [];
 
         $http.get('/api/logconversation/usuarios').then(
@@ -127,7 +130,6 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         );
 
         $scope.loading = false;
-
     }
 
     $scope.logout = function() {
@@ -168,7 +170,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
             $scope.disableBtnTreinarEntidade = false;
         } else {
             $scope.disableBtnTreinarIntencao = true;
-              $scope.disableBtnTreinarEntidade = true;
+            $scope.disableBtnTreinarEntidade = true;
         }
     };
 

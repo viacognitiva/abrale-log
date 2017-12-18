@@ -5,8 +5,6 @@ var auth = {
 
     login : function(req,res) {
 
-        console.log("SESSAO ="+req.session);
-
         var username = req.body.username || '';
         var password = req.body.password || '';
 
