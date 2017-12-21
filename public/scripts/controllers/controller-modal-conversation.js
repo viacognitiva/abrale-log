@@ -47,7 +47,6 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
 
                                 function(response){
 
-                                    //success callback
                                     if(response.status==200){
                                         if(response.data.error){
                                             $ctrl.errorMessage=""+response.data.error;
