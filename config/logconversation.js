@@ -15,9 +15,9 @@ var logConversation = {
 
     get : function(req,res) {
 
-        const baseQuery = '/conversation/api/v1/workspaces/'+ workspacesId +'/logs';
+        const baseQuery = '/conversation/api/v1/workspaces/'+ workspacesId + '/logs';
         const version = 'version=2017-05-26';
-        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' + version;
         console.log('logConversation.get');
 
         request.get(fullUrl,function(err,resp,body){
@@ -35,7 +35,7 @@ var logConversation = {
 
         const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities';
         const version = 'version=2017-05-26&export=false&include_count=false';
-        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' + version;
         console.log(fullUrl);
 
         request.get(fullUrl,function(err,resp,body){
@@ -52,7 +52,7 @@ var logConversation = {
 
         const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/intents';
         const version = 'version=2017-05-26&export=false&include_count=false';
-        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' + version;
         console.log(fullUrl);
 
         request.get(fullUrl,function(err,resp,body){
@@ -69,9 +69,9 @@ var logConversation = {
     treinaIntencao : function(req,res) {
 
         const intent =  req.body.intencao;
-        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/intents/${intent}/examples';
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/intents/' + intent + '/examples';
         const version = 'version=2017-05-26';
-        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' + version;
         console.log(fullUrl);
 
         request.post({
@@ -90,9 +90,9 @@ var logConversation = {
     treinaEntidade : function(req,res) {
 
         const entity =  req.body.entidade;
-        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities/' + entity +'/values';
+        const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities/' + entity + '/values';
         const version = 'version=2017-05-26';
-        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' + version;
 
         request.post(
             {
@@ -115,7 +115,7 @@ var logConversation = {
         const entity=req.params.entity;
         const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities/' + entity + '/values';
         const version = 'version=2017-05-26&export=false&include_count=false';
-        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' + version;
 
         request.get(fullUrl,function(err,resp,body){
             if(err){
@@ -132,7 +132,7 @@ var logConversation = {
 
         const baseQuery = '/conversation/api/v1/workspaces/' + workspacesId + '/entities/' + entity + '/values/' + value + '/synonyms';
         const version = 'version=2017-05-26';
-        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' +version;
+        const fullUrl = 'https://' + username + ':' + password + '@' + apiHostname + baseQuery + '?' + version;
 
         request.post(
             {
@@ -144,7 +144,7 @@ var logConversation = {
 
             function(err,resp,body){
                 if(err){
-                    console.log(" logConversation.criarSinonimoo Error: "+body);
+                    console.log(" logConversation.criarSinonimoo Error: " + body);
                 }
                 res.status(200).json(body);
             }

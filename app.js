@@ -77,6 +77,10 @@ app.get('/api/logconversation/usuarios', function (req, res) {
     cloudant.getUsuarios(req, res);
 });
 
+app.get('/api/logconversation/outros', function (req, res) {
+    cloudant.getOutros(req, res);
+});
+
 app.post('/api/logconversation/treinamento/status', function (req, res) {
     cloudant.atualizaStatusTreinamento(req, res);
 });
@@ -120,7 +124,6 @@ app.post('/api/logconversation/entidade/synonyms', function (req, res) {
 });
 
 app.get('/api/logconversation/entidade/value/:entity', function (req, res) {
-    console.dir(req);
     logconversation.getEntidadeValue(req, res);
 });
 

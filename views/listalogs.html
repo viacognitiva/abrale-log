@@ -5,7 +5,7 @@
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--<link rel="shortcut icon" type="image/ico" href="/images/indice.png">-->
+        <link rel="shortcut icon" type="image/ico" href="/images/favicon.ico">
         <link href="/images/favicon.ico" rel="shortcut icon" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- Font Awesome -->
@@ -21,7 +21,6 @@
         <link rel="stylesheet" type="text/css" href="/style/custom.css"/>
 
     </head>
-    <!--<body class="hold-transition skin-blue sidebar-mini">-->
 
     <body ng-controller="myController" ng-init="inicializa()" class="skin-blue sidebar-mini" style="height: auto; min-height: 100%;">
 
@@ -70,11 +69,12 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="box-body">
-                        <button ng-click="chat()" class="btn btn-primary" ng-hide="mostrarUsuario">  <i class="fa fa-comment fa-fw"></i>  Visualizar Conversas</button>
-                        <button ng-click="usuario()" class="btn btn-primary" ng-hide="mostrarChat">  <i class="fa fa-user fa-fw"></i>  Visualizar Usuários</button>
+                        <button ng-click="chat()" class="btn btn-primary" ng-hide="showbtnChat">  <i class="fa fa-comment fa-fw"></i>  Visualizar Conversas</button>
+                        <button ng-click="usuario()" class="btn btn-primary" ng-hide="showbtnUsers">  <i class="fa fa-user fa-fw"></i>  Visualizar Usuários</button>
+                        <button ng-click="outros()" class="btn btn-primary" ng-hide="showbtnOutros">  <i class="fa fa-bug fa-fw"></i>  Visualizar Outros</button>
                         <!--<button ng-click="aplicar()" class="btn btn-info pull-right">Aplicar</button>-->
-                        <button ng-click="modalEntidade('lg','entidade')" class="btn btn-primary direita" ng-disabled="disableBtnTreinarEntidade" ng-hide="mostrarChat">Treinar Entidade</button>
-                        <button ng-click="modalIntencao('lg','intencao')" class="btn btn-primary direita" ng-disabled="disableBtnTreinarIntencao"ng-hide="mostrarChat">Treinar Intenção</button>
+                        <button ng-click="modalEntidade('lg')" class="btn btn-primary direita" ng-disabled="disableBtnTreinarEntidade" ng-hide="mostrarbtnEnt">Treinar Entidade</button>
+                        <button ng-click="modalIntencao('lg')" class="btn btn-primary direita" ng-disabled="disableBtnTreinarIntencao"ng-hide="mostrarbtnInt">Treinar Intenção</button>
 
                         <div ng-hide="mostrarChat" style="display: none;">
                             <span class="acuracidade" >
@@ -186,7 +186,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="item in (filteredItems = (items | orderBy:sortType:sortReverse | filter:searchFish | filterTreinamento:selectedOpcaoTreinamento | filterConfianca:selectedSinalMaiorMenor:selectedPrcConfianca:selectedTpTreinamento  ))"  >
+                                        <tr ng-repeat="item in (filteredItems = (items | orderBy:sortType:sortReverse | filter:searchFish | filterTreinamento:selectedOpcaoTreinamento | filterConfianca:selectedSinalMaiorMenor:selectedPrcConfianca:selectedTpTreinamento ))">
                                             <td>
                                                 <input type="checkbox" name="selectedItem[]"  value="{{item.id}}" ng-checked="selection.indexOf(item.id) > -1" ng-click="toggleSelection(item.id)">
                                             </td>
@@ -261,6 +261,65 @@
                                             <td>{{itemU.fone}}</td>
                                             <td>{{itemU.data}}</td>
                                         </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-hide="mostrarOutros">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Digite a busca desejada..." ng-model="searchFish" style="width:350px">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="tabela">
+                            <div class="box_limiteAltura">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th><a href="#" > </a>
+                                            <div><a href="#" > </a></div>
+                                        </th>
+                                        <th>ID da Conversa
+                                            <div><a href="#" ng-click="sort_by('idchat')">
+                                                ID da Conversa
+                                                <span ng-show="showDown('idchat')" class="fa fa-caret-down"></span>
+                                                <span ng-show="showUp('idchat')" class="fa fa-caret-up"></span>
+                                            </a></div>
+                                        </th>
+                                        <th>Mensagem do Usuário
+                                            <div><a href="#" ng-click="sort_by('msgUser')">
+                                                Mensagem do Usuário
+                                                <span ng-show="showDown('msgUser')" class="fa fa-caret-down"></span>
+                                                <span ng-show="showUp('msgUser')" class="fa fa-caret-up"></span>
+                                            </a></div>
+                                        </th>
+                                        <th>Data
+                                            <div><a href="#" ng-click="sort_by('data')">
+                                                Data
+                                                <span ng-show="showDown('data')" class="fa fa-caret-down"></span>
+                                                <span ng-show="showUp('data')" class="fa fa-caret-up"></span>
+                                            </a></div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="itemO in (filteredoutros = (itemOutros | orderBy:sortType:sortReverse | filter:searchFish | filterTreinamento:selectedOpcaoTreinamento | filterConfianca:selectedSinalMaiorMenor:selectedPrcConfianca:selectedTpTreinamento  ))" >
+                                        <td>
+                                            <input type="checkbox" name="selectedItem[]" value="{{itemO.id}}" ng-checked="selection.indexOf(itemO.id) > -1" ng-click="toggleSelection(itemO.id)">
+                                        </td>
+                                        <td>{{itemO.idchat}}</td>
+                                        <td>{{itemO.msgUser}}</td>
+                                        <td>{{itemO.data}}</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

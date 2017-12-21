@@ -12,9 +12,20 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
 
     $ctrl.ok = function() {
 
+        var valores = [];
         limpar();
 
-        if($scope.parametro=='intencao'){
+        if($scope.parametro=='intencao' || $scope.parametro=='textoInt'){
+
+            if($scope.parametro=='intencao'){
+                angular.forEach($scope.items, function(its){
+                    valores.push(its);
+                });
+            } else {
+                angular.forEach($scope.itemOutros, function(its){
+                    valores.push(its);
+                });
+            }
 
             if($scope.selection.length==0){
                 $ctrl.errorMessage="Selecione na tabela algum registro.";
@@ -22,13 +33,9 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
 
                 angular.forEach($scope.selection, function(sel){
 
-                    console.log('checksboxx'+sel);
-                    angular.forEach($scope.items, function(item){
+                    angular.forEach(valores, function(item){
 
                         if(item.id==sel){
-
-                            console.log('Msg User'+item.msgUser );
-                            console.log('selected '+$scope.selectedIntencao );
 
                             var config = {headers : {'Content-Type': 'application/json; charset=utf-8'}}
                             var data = {
@@ -41,8 +48,6 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
                                 function(response){
 
                                     //success callback
-                                    console.log('Sucesso /api/logconversation/intencao' + JSON.stringify(response));
-
                                     if(response.status==200){
                                         if(response.data.error){
                                             $ctrl.errorMessage=""+response.data.error;
@@ -74,7 +79,17 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
             }//fim do else
         }
 
-        if($scope.parametro=='entidade'){
+        if($scope.parametro=='entidade' || $scope.parametro=='textoEnt'){
+
+            if($scope.parametro=='entidade'){
+                angular.forEach($scope.items, function(its){
+                    valores.push(its);
+                });
+            } else {
+                angular.forEach($scope.itemOutros, function(its){
+                    valores.push(its);
+                });
+            }
 
             if($scope.selection.length==0){
                 $ctrl.errorMessage="Selecione na tabela algum registro.";
@@ -83,7 +98,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
 
                 angular.forEach($scope.selection, function(sel){
 
-                    angular.forEach($scope.items, function(item){
+                    angular.forEach(valores, function(item){
 
                         if(item.id == sel){
 
@@ -97,7 +112,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
                                     sinonimo: item.msgUser,
                                     idLog:sel
                                 };
-
+                                console.log(JSON.stringify(data));
                                 $http.post('/api/logconversation/entidade/synonyms',JSON.stringify(data),config).then(
 
                                     function(response){
@@ -107,20 +122,21 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
                                             if(response.data.error){
                                                 $ctrl.errorMessage=""+response.data.error;
 
-                                             }else {
-                                                $ctrl.sucessoMessage="Sinonimo criado com sucesso.";
+                                            }else {
                                                 var data1 = { idLog:sel };
                                                 $http.post('/api/logconversation/treinamento/status',JSON.stringify(data1),config).then(
 
                                                     function(response){
-                                                        console.log('Sucesso ' + JSON.stringify(response));
+                                                        $ctrl.sucessoMessage="Sinonimo criado com sucesso.";
+                                                        //console.log('Sucesso ' + JSON.stringify(response));
 
                                                         if(response.status==201){
                                                             $scope.buscar();
                                                         }
                                                     },
                                                     function(erro){
-                                                        console.log('Erro '+erro);
+                                                        $ctrl.errorMessage = "Erro";
+                                                        //console.log('Erro ' + JSON.stringify(erro));
                                                     }
                                                 );
                                             }
@@ -128,7 +144,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
                                     },
                                     function(erro){
                                         console.log('Erro '+ erro);
-                                        $ctrl.errorMessage="Error "+erro;
+                                        $ctrl.errorMessage="Error " + erro;
                                     }
                                 );
 
@@ -150,25 +166,25 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
 
                                             } else {
 
-                                                $ctrl.sucessoMessage="Valor da Entidade criado com sucesso.";
                                                 var data1 = { idLog:sel };
                                                 $http.post('/api/logconversation/treinamento/status',JSON.stringify(data1),config).then(
                                                     function(response){
-
+                                                        $ctrl.sucessoMessage="Valor da Entidade criado com sucesso.";
                                                         if(response.status==201){
                                                             $scope.buscar();
                                                         }
                                                     },
-                                                    function(response){
-                                                        console.log('Erro '+response);
+                                                    function(error){
+                                                        console.log('Erro ' + error);
+                                                        $ctrl.errorMessage="Error " + error;
                                                      }
                                                 );
                                             }
                                         }
                                     },
                                     function(erro){
-                                        console.log('Erro '+response);
-                                        $ctrl.errorMessage="Error"+response;
+                                        console.log('Erro '+erro);
+                                        $ctrl.errorMessage="Error"+erro;
                                     }
                                 );
                             }
@@ -257,6 +273,81 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
 
             $ctrl.intencoes = retorno;
         });
+
+    } else if ($scope.parametro=='textoEnt'){
+
+        try {
+            angular.forEach($scope.selection, function(sel){
+
+                angular.forEach($scope.itemOutros, function(item){
+
+                    if(item.id==sel){
+                        $ctrl.mensagemEntidade=item.msgUser;
+                        throw Error();//usado para simular o break, pra não iterar toda lista quando encontrado
+                    }
+                });
+            });
+
+        } catch(e) {
+            //console.log(e);
+        }
+
+        limpar();
+
+         $http.get('/api/logconversation/entities').then(function(response) {
+
+            var retorno = [];
+            var data = response.data;
+            var x=0;
+
+            angular.forEach(data.entities, function(ent){
+                var jsonParam = {}
+                jsonParam.id=++x;
+                jsonParam.descricao=ent.entity;
+                retorno.push(jsonParam);
+            });
+
+            $ctrl.entidades = retorno;
+
+        });
+
+    } else if ($scope.parametro=='textoInt'){
+
+        try {
+            angular.forEach($scope.selection, function(sel){
+
+                angular.forEach($scope.itemOutros, function(item){
+
+                    if(item.id==sel){
+                        $ctrl.mensagemIntencao=item.msgUser;
+                        throw Error();//usado para simular o break, pra não iterar toda lista quando encontrado
+                    }
+                });
+            });
+
+        } catch(e) {
+            //console.log(e);
+        }
+
+        limpar();
+
+        $http.get('/api/logconversation/intencoes').then(function(response) {
+
+            var retorno = [];
+            var data = response.data;
+            var x=0;
+
+            angular.forEach(data.intents, function(int){
+
+                var jsonParam = {}
+                jsonParam.id=++x;
+                jsonParam.descricao=int.intent;
+                retorno.push(jsonParam);
+            });
+
+            $ctrl.intencoes = retorno;
+        });
+
     }
 
     //funcão quando modificado o select da entidade
@@ -267,21 +358,26 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
         var entidade = $scope.selectedEntidade;
         if($ctrl.defineVlrSin == 'Sinonimo'){
 
-            $http.get('/api/logconversation/entidade/value/'+entidade).then(function(response) {
+            $http.get('/api/logconversation/entidade/value/'+entidade).then(
+                function(response) {
 
-                var retorno = [];
-                var data = response.data;
-                var x=0;
+                    var retorno = [];
+                    var data = response.data;
+                    var x=0;
 
-                angular.forEach(data.values, function(val){
-                    var jsonParam = {}
-                    jsonParam.id=++x;
-                    jsonParam.descricao=val.value;
-                    retorno.push(jsonParam);
-                });
+                    angular.forEach(data.values, function(val){
+                        var jsonParam = {}
+                        jsonParam.id=++x;
+                        jsonParam.descricao=val.value;
+                        retorno.push(jsonParam);
+                    });
 
-                $ctrl.EntidadeValues = retorno;
-            });
+                    $ctrl.EntidadeValues = retorno;
+                },
+                function(error){
+                    console.log('Error - onchangeEntidade:' + JSON.stringify(error));
+                }
+            );
         }
     };
 
@@ -295,93 +391,5 @@ app.controller('ModalInstanceCtrl', ['$scope','$uibModalInstance','$http',functi
             $ctrl.selectedEntidadeValue="";
         }
     };
-
-    if ($scope.parametro == 'configworkspace'){
-
-        limpar();
-
-        $http.get('/api/logconversation/workspace').then(function(response) {
-
-            var retorno = [];
-            var data = response.data;
-
-            angular.forEach(data.docs, function(val){
-                var jsonParam = {}
-                jsonParam.id=val._id
-                jsonParam.nome=val.nome;
-                jsonParam.workspaceId=val.workspaceId;
-                jsonParam.username=val.username;
-                jsonParam.password=val.password;
-                retorno.push(jsonParam);
-            });
-
-            $ctrl.workspacesValues = retorno;
-        });
-    }
-
-    $ctrl.onchangeWorkspace = function() {
-
-        try {
-
-            angular.forEach($ctrl.workspacesValues, function(item){
-
-                if(item.id==$scope.selectedWorkspace){
-                    $ctrl.itemWorksapceSelected=item;
-                    throw Error();//usado para simular o break, pra não iterar toda lista quando encontrado
-                }
-            });
-        } catch(e) {
-            //console.log(e);
-        }
-    }
-
-    $ctrl.saveWorkspace = function() {
-
-        var config = {headers : {'Content-Type': 'application/json; charset=utf-8'}};
-        var data = {
-            workspaceId: $scope.workspaceId ,
-            username: $scope.username ,
-            password: $scope.password,
-            nome: $scope.nome
-        };
-
-        $http.post('/api/logconversation/workspace',JSON.stringify(data),config).then(
-            function(response){
-
-                if(response.status==201){
-                    if(response.data.error){
-                        $ctrl.errorMessage=""+response.data.error;
-                    }else {
-                        $ctrl.sucessoMessage="workspace criado com sucesso.";
-                    }
-                }
-            },
-            function(erro){
-                console.log('Erro ' + erro);
-                $ctrl.errorMessage="Error" + erro;
-            }
-        );
-
-    }
-
-    $ctrl.configureWorkspace = function() {
-
-        var config = {headers : {'Content-Type': 'application/json; charset=utf-8'}};
-        $http.put('/api/logconversation/workspace/'+$scope.selectedWorkspace, config).then(
-
-            function(response){
-                if(response.status==200){
-                    if(response.data.error){
-                        $ctrl.errorMessage=""+response.data.error;
-                    }else {
-                        $ctrl.sucessoMessage="workspace configurado com sucesso.";
-                    }
-                }
-            },
-            function(erro){
-                $ctrl.errorMessage="Error"+response;
-            }
-        );
-    }
 
 }]);

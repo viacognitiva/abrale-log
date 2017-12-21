@@ -28,10 +28,10 @@ if(process.env.VCAP_SERVICES) {
 }
 
 var dbname = process.env.CLOUDANT_DB;
-var dbuser = process.env.CLOUDANT_DBUSER;
 var cloudantDB = Cloudant({url:cloudant_url, account:user, password:password});
 db = cloudantDB.db.use(dbname);
-dbUser = cloudantDB.db.use(dbuser);
+dbUser = cloudantDB.db.use(process.env.CLOUDANT_DBUSER);
+dbOutros = cloudantDB.db.use(process.env.CLOUDANT_DBTREINO);
 
 var cloudant = {
 
@@ -50,6 +50,18 @@ var cloudant = {
         dbUser.list({include_docs:true},function(err, data) {
             if(err){
                 return console.log('[dbUser.getUsuarios] ', err.message);
+                res.status(500);
+            }
+            res.status(200).json(data);
+        });
+
+    },
+
+    getOutros : function(req, res){
+
+        dbOutros.list({include_docs:true},function(err, data) {
+            if(err){
+                return console.log('[dbOutros.getOutros] ', err.message);
                 res.status(500);
             }
             res.status(200).json(data);

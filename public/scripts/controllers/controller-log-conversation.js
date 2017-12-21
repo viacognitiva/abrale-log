@@ -5,11 +5,21 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
     function($scope,$log,$http,$filter,$uibModal,$window) {
 
     $scope.mostrarUsuario = true;
+    $scope.mostrarOutros = true;
+    $scope.mostrarChat = false;
+
+    $scope.showbtnOutros = false;
+    $scope.showbtnUsers = false;
+    $scope.showbtnChat = true;
+
+    $scope.mostrarbtnInt = false;
+    $scope.mostrarbtnEnt = false;
 
     $scope.sortType     = 'name'; // set the default sort type
     $scope.sortReverse  = true;  // set the default sort order
     $scope.searchFish   = '';     // set the default search/filter term
     $scope.errorMessage = '';
+    $scope.tipo = 'chat';
 
     $scope.disableBtnTreinarIntencao = true;
     $scope.disableBtnTreinarEntidade = true;
@@ -19,11 +29,37 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
     $scope.prcConfianca = ["10", "20","30","40","50","60","70","80","90","100"];
     $scope.sinalMaiorMenor = ["<=", ">="];
 
+    $scope.inicializa = function(){
+
+        $http.get('/api/getUserAutenticado').then(function(response) {
+            var data = response.data;
+            $scope.usuariologado = data.username;
+        });
+
+        $http.get('/api/logconversation/acuracidade').then(function(response) {
+            var data = response.data;
+            $scope.acuracidade = parseFloat(data.acuracidade.toFixed(2));
+        });
+
+        $scope.buscar();
+    };
+
     $scope.chat = function(){
+
         $scope.mostrarUsuario   = true;
         $scope.mostrarChat      = false;
+        $scope.mostrarOutros    = false;
         $scope.searchFish       = '';
         $scope.errorMessage     = '';
+
+        $scope.showbtnOutros    = false;
+        $scope.showbtnUsers     = false;
+        $scope.showbtnChat      = true;
+
+        $scope.mostrarbtnInt    = false;
+        $scope.mostrarbtnEnt    = false;
+        $scope.tipo             = 'chat';
+
     }
 
     $scope.buscar = function() {
@@ -88,9 +124,19 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         $scope.loading          = true;
         $scope.mostrarUsuario   = false;
         $scope.mostrarChat      = true;
+        $scope.mostrarOutros    = true;
         $scope.searchFish       = '';
         $scope.errorMessage     = '';
-        var retorno = [];
+
+        $scope.showbtnOutros    = false;
+        $scope.showbtnUsers     = true;
+        $scope.showbtnChat      = false;
+
+        $scope.mostrarbtnInt    = true;
+        $scope.mostrarbtnEnt    = true;
+
+        $scope.tipo             = '';
+        var retorno             = [];
 
         $http.get('/api/logconversation/usuarios').then(
 
@@ -130,6 +176,65 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         );
 
         $scope.loading = false;
+    }
+
+    $scope.outros = function(){
+
+        $scope.loading          = true;
+        $scope.mostrarUsuario   = true;
+        $scope.mostrarChat      = true;
+        $scope.mostrarOutros    = false;
+        $scope.searchFish       = '';
+        $scope.errorMessage     = '';
+
+        $scope.showbtnOutros    = true;
+        $scope.showbtnUsers     = false;
+        $scope.showbtnChat      = false;
+
+        $scope.mostrarbtnInt    = false;
+        $scope.mostrarbtnEnt    = false;
+
+        $scope.tipo             = 'outros';
+        var retorno             = [];
+
+        $http.get('/api/logconversation/outros').then(
+
+            function(response){
+
+                var data = response.data;
+
+                angular.forEach(data.rows, function(item){
+
+                    var jsonParam = {};
+                    jsonParam.id = item.doc._id;
+                    jsonParam.idchat = item.doc.idchat;
+                    jsonParam.msgUser = item.doc.texto;
+                    jsonParam.data = $filter('date')(new Date(item.doc.data), "dd/MM/yyyy HH:mm:ss");
+
+                    if(!angular.equals(jsonParam, {})){
+                        retorno.push(jsonParam);
+                    }
+
+                });
+
+                $scope.itemOutros = retorno;
+                $scope.filteredOutros = retorno;
+
+                if(retorno.length==0 ){
+                    $scope.errorMessage='Registro não encontrado.';
+                } else {
+                    $scope.errorMessage='';
+                }
+            },
+
+            function(erro){
+                console.log(erro);
+                res.status(500).json(erro);
+            }
+        );
+
+        $scope.loading = false;
+
     }
 
     $scope.logout = function() {
@@ -183,9 +288,14 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
 
     var $ctrl = this;
 
-    $scope.modalEntidade = function(size,param) {
+    $scope.modalEntidade = function(size) {
 
-        $scope.parametro=param;
+        if($scope.tipo =='chat'){
+            $scope.parametro='entidade';
+        }else{
+            $scope.parametro='textoEnt';
+        }
+
         $uibModal.open({
             scope: $scope,
             animation: true,
@@ -199,9 +309,14 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         });
     };
 
-    $scope.modalIntencao = function(size,param) {
+    $scope.modalIntencao = function(size) {
 
-        $scope.parametro=param;
+        if($scope.tipo =='chat'){
+            $scope.parametro='intencao';
+        }else{
+            $scope.parametro='textoInt';
+        }
+
         $uibModal.open({
             scope: $scope,
             animation: true,
@@ -214,54 +329,6 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
             size: size,
         });
     };
-
-    $scope.modalConfigWorkspace = function(size,param) {
-
-        $scope.parametro=param;
-        $uibModal.open({
-            scope: $scope,
-            animation: true,
-            controllerAs: '$ctrl',
-            // Esse vai exibir o nome do scope atual
-            templateUrl: 'myModalAdmWorkspace.html',
-            controller: 'ModalInstanceCtrl',
-            windowClass: 'custom-dialog',
-            backdrop:false,
-            size: size,
-        });
-    };
-
-    $scope.modalCriarWorkspace = function(size,param) {
-       
-        $scope.parametro=param;
-        $uibModal.open({
-            scope: $scope,
-            animation: true,
-            controllerAs: '$ctrl',
-            // Esse vai exibir o nome do scope atual
-            templateUrl: 'myModalConfigWorkspace.html',
-            controller: 'ModalInstanceCtrl',
-            windowClass: 'custom-dialog',
-            backdrop:false,
-            size: size,
-        });
-    };
-
-    $scope.inicializa = function(){
-
-        $http.get('/api/getUserAutenticado').then(function(response) {
-            var data = response.data;
-            $scope.usuariologado = data.username;
-        });
-
-        $http.get('/api/logconversation/acuracidade').then(function(response) {
-            var data = response.data;
-            $scope.acuracidade = parseFloat(data.acuracidade.toFixed(2));
-        });
-
-        $scope.buscar();
-    };
-
 
     }]);
 
