@@ -60,7 +60,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         $scope.mostrarbtnEnt    = false;
         $scope.tipo             = 'chat';
 
-    }
+    };
 
     $scope.buscar = function() {
 
@@ -117,7 +117,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
             $scope.loading = false;
 
         });
-    }
+    };
 
     $scope.usuario = function(){
 
@@ -176,7 +176,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
         );
 
         $scope.loading = false;
-    }
+    };
 
     $scope.outros = function(){
 
@@ -235,11 +235,11 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
 
         $scope.loading = false;
 
-    }
+    };
 
     $scope.logout = function() {
         $window.location.href='/';
-    }
+    };
 
     $scope.isNumber = angular.isNumber;
 
