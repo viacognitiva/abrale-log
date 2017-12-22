@@ -48,7 +48,7 @@ app.controller('myController', ['$scope', '$log', '$http','$filter','$uibModal',
 
         $scope.mostrarUsuario   = true;
         $scope.mostrarChat      = false;
-        $scope.mostrarOutros    = false;
+        $scope.mostrarOutros    = true;
         $scope.searchFish       = '';
         $scope.errorMessage     = '';
 
