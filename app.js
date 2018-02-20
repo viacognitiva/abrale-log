@@ -54,9 +54,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {}
-}))
+}));
 
-var job = schedule.scheduleJob('00 01 00 * * ', function(){
+var job = schedule.scheduleJob('*/30 * * * * ', function(){
     console.log('Rodando Job Carga Log Treinamento..');
     cloudant.insertLogTreinamento(function() {});
 });
@@ -98,7 +98,7 @@ app.get('/api/logconversation/acuracidade', function (req, res) {
 app.get('/api/getUserAutenticado', function (req, res) {
   if (typeof req.session.usuario != 'undefined'){
       res.status(200).json(req.session.usuario);
-  }else {
+  } else {
       res.status(200).json({"message":"usuário não encontrado na sessão"});
   }
 });
